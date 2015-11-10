@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.listMovies);
         adapter = new MovieAdapter(
                 getApplicationContext(),
-                R.layout.movielistitem,
+                R.layout.movie_list_item,
                 movieList
         );
         list.setAdapter(adapter);
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                             Movie movie = adapter.getItem(i);
                                             Intent intent = new Intent(MainActivity.this, MovieActivity.class);
-                                            intent.putExtra("URL", movie.url);
+                                            intent.putExtra("Movie", movie);
                                             startActivity(intent);
                                         }
                                     }
