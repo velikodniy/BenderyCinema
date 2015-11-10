@@ -1,4 +1,4 @@
-package name.velikodniy.vadim.benderycinema.movies;
+package name.velikodniy.vadim.benderycinema.movie;
 
 import android.os.AsyncTask;
 
@@ -7,16 +7,38 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class MovieInfoLoadTask extends AsyncTask<Void, Void, ArrayList<MovieRecord>> {
+public class Movie {
+    public String title;
+    public String sessions;
+    public String url;
+
+    public Movie(String title, String sessions, String url) {
+        this.title = title;
+        this.sessions = sessions;
+        this.url = url;
+    }
+
+    public static ArrayList<Movie> loadMovies() {
+        AsyncTask<Void, Void, ArrayList<Movie>> infoLoadTask = new MovieInfoLoadAsync().execute();
+        try {
+            return infoLoadTask.get();
+        } catch (InterruptedException|ExecutionException e) {
+            return null;
+        }
+    }
+}
+
+class MovieInfoLoadAsync extends AsyncTask<Void, Void, ArrayList<Movie>> {
     final static String rss_url = "http://kino-bendery.info/rss.xml";
 
     @Override
-    protected ArrayList<MovieRecord> doInBackground(Void... voids) {
-        ArrayList<MovieRecord> movies = new ArrayList<>();
+    protected ArrayList<Movie> doInBackground(Void... voids) {
+        ArrayList<Movie> movies = new ArrayList<>();
         Document doc;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -34,12 +56,9 @@ public class MovieInfoLoadTask extends AsyncTask<Void, Void, ArrayList<MovieReco
                 String title = item.getElementsByTagName("title").item(0).getTextContent();
                 String sessions = item.getElementsByTagName("seanses").item(0).getTextContent();
                 String URL = item.getElementsByTagName("link").item(0).getTextContent();
-                movies.add(new MovieRecord(title, sessions, URL));
-            } catch (NullPointerException e) {
-                continue;
-            }
+                movies.add(new Movie(title, sessions, URL));
+            } catch (NullPointerException e) { }
         }
-
         return movies;
     }
 }

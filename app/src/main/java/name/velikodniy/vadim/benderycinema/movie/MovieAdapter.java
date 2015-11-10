@@ -1,4 +1,4 @@
-package name.velikodniy.vadim.benderycinema.movies;
+package name.velikodniy.vadim.benderycinema.movie;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,11 +11,10 @@ import java.util.ArrayList;
 
 import name.velikodniy.vadim.benderycinema.R;
 
-public class MovieRecordAdapter extends ArrayAdapter<MovieRecord> {
-    private ArrayList<MovieRecord> movies;
+public class MovieAdapter extends ArrayAdapter<Movie> {
+    private ArrayList<Movie> movies;
 
-
-    public MovieRecordAdapter(Context context, int resource, ArrayList<MovieRecord> movies) {
+    public MovieAdapter(Context context, int resource, ArrayList<Movie> movies) {
         super(context, resource, movies);
         this.movies = movies;
     }
@@ -24,11 +23,11 @@ public class MovieRecordAdapter extends ArrayAdapter<MovieRecord> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.movielistitem, null);
         }
 
-        MovieRecord movie = movies.get(position);
+        Movie movie = movies.get(position);
         if (movie != null) {
             TextView title_view = (TextView) v.findViewById(R.id.movie_title);
             TextView sessions_view = (TextView) v.findViewById(R.id.movie_sessions);
@@ -37,7 +36,7 @@ public class MovieRecordAdapter extends ArrayAdapter<MovieRecord> {
                 title_view.setText(movie.title);
             }
 
-            if(sessions_view != null) {
+            if (sessions_view != null) {
                 sessions_view.setText(movie.sessions);
             }
         }
